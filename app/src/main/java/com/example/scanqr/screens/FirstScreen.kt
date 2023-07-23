@@ -46,7 +46,7 @@ fun BodyContent(navController: NavController){
 
         Spacer(modifier = Modifier.height(60.dp))
 
-        Text("Generá tu Código QR")
+        Text("Genera tu Código QR")
         Button(onClick = {
             navController.navigate(route = AppScreens.QrGeneratorScreen.route)
         }) {
