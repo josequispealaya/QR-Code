@@ -2,16 +2,17 @@ package com.example.scanqr.screens
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -24,14 +25,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.scanqr.navigation.AppNavigation
-import com.example.scanqr.ui.theme.ScanQrTheme
 import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 
@@ -99,48 +96,50 @@ fun QrScannerScreen(navController: NavController) {
         if (isPopupVisible) {
             AlertDialog(
                 onDismissRequest = { isPopupVisible = false },
-                title = { Text(text = "Room invitation") },
+                title = { Text(text = "Código Escaneado") },
                 text = { Text(text = stringFromQrCode) },
                 confirmButton = {
                     Button(
                         onClick = {
-                            navController.navigate(Uri.parse(stringFromQrCode))
-                            //onNavigateToRoom(stringFromQrCode.split("/")[3])
-//                            coroutineScope.launch {
-//                                delay(2000)
-//                                isScanningEnabled = true
-//                            }
+                            //navController.navigate(Uri.parse(stringFromQrCode))
+                            //val webpage = Uri.parse(stringFromQrCode)
+                            //val context = LocalContext
+                            //val permissionState = rememberPermissionState(Manifest.permission.INTERNET)
+                            //val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()){isGranted ->
+                               // if (true) {
+                                  //  val intent = Intent(Intent.ACTION_VIEW, webpage)
+                                  //  context.startActivity(intent)
+                               // }
+
                         }
                     ) {
-                        Text(text = "ir al Código escaneado")
+                        Text(text = "los permisos para ir a una página externa al hacer clik en el código no están funcionando")
                     }
                 },
-                dismissButton = {
+               /* dismissButton = {
                     Button(
                         onClick = {
-                            isPopupVisible = false
-                            /*    coroutineScope.launch {
-                                delay(2000)
-                                isScanningEnabled = true
-                            }*/
+                                  isScanningEnabled = true
                         }
                     ) {
                         Text(text = "Close")
                     }
-                }
+                }*/
+
             )
         }
     }
 
-    Spacer(modifier = Modifier.height(100.dp))
+    //Spacer(modifier = Modifier.height(80.dp))
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text("Esta es la pantalla que va Escanear el QR")
-        Button(onClick = {
+        Text("Este es tu QR Escabeado")
+        Button(modifier = Modifier.padding(bottom = 20.dp),
+            onClick = {
             navController.popBackStack()
         }) {
             Text(text = "Volver atrás")
@@ -148,3 +147,5 @@ fun QrScannerScreen(navController: NavController) {
         }
     }
 }
+
+
