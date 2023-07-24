@@ -116,15 +116,16 @@ fun QrScannerScreen(navController: NavController) {
                         Text(text = "los permisos para ir a una página externa al hacer clik en el código no están funcionando")
                     }
                 },
-               /* dismissButton = {
+                dismissButton = {
                     Button(
                         onClick = {
+                                  isPopupVisible = false
                                   isScanningEnabled = true
                         }
                     ) {
                         Text(text = "Close")
                     }
-                }*/
+                }
 
             )
         }

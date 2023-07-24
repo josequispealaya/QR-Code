@@ -43,9 +43,10 @@ import coil.compose.rememberAsyncImagePainter
 fun QrGeneratorScreen(navController: NavController){
     var imageBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
+    /*AQUÍ TENEMOS QUE TOMAR UN STREEM PARA GENERAR EL QR*/
+    /* POR AHORA ESTÁ HARDCODEADO CON www.google.com*/
 
-
-    var url by remember { mutableStateOf(" ") }
+    var url by remember { mutableStateOf("www.google.com") }
 
     TextField(value = url, onValueChange = { url = it})
 
