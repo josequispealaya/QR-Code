@@ -37,18 +37,26 @@ import coil.compose.rememberAsyncImagePainter
 
 
 @OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-
-
 fun QrGeneratorScreen(navController: NavController){
-    var imageBitmap by remember { mutableStateOf<Bitmap?>(null) }
-
-    /*AQUÍ TENEMOS QUE TOMAR UN STREEM PARA GENERAR EL QR*/
+    /*AQUÍ TENEMOS QUE TOMAR UN STRING QUE INGRESA EL USUARIO PARA GENERAR EL QR*/
     /* POR AHORA ESTÁ HARDCODEADO CON www.google.com*/
 
-    var url by remember { mutableStateOf("www.google.com") }
+    var text by remember { mutableStateOf("") }
+    var imageBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
-    TextField(value = url, onValueChange = { url = it})
+/*    var text by remember { mutableStateOf("") }
+    TextField(value = text,
+        onValueChange = {text = it} )
+    Column {
+        Button(onClick = {navController.popBackStack()}){
+            Text(text = "Generar QR")
+        }
+    }*/
+
+    text = "www.google.com"
+    var url by remember { mutableStateOf(text) }
 
     val stringToQrCode by remember { mutableStateOf(url) }
 
@@ -60,13 +68,11 @@ fun QrGeneratorScreen(navController: NavController){
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        //color = MaterialTheme.colors.background
-    ) {
+        ) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            //NavBar(user = user)
-            Column(
+              Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(24.dp),
@@ -82,10 +88,7 @@ fun QrGeneratorScreen(navController: NavController){
                         .fillMaxWidth()
                         .padding(top = 24.dp)
                 ) {
-                    /*Text(
-                        text = "Scan the QR Code",
-                        style = MaterialTheme.typography.bodyLarge
-                    )*/
+
                     Spacer(modifier = Modifier.height(16.dp))
                     Box(
                         modifier = Modifier
@@ -126,6 +129,15 @@ fun QrGeneratorScreen(navController: NavController){
 
     }
 }
+
+/*
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TextFieldWithState() {
+    var text by remember { mutableStateOf("") }
+    TextField(value = text,
+    onValueChange = {text = it} )
+}*/
 
 
 

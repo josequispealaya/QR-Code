@@ -52,7 +52,7 @@ fun BodyContent(navController: NavController){
 
         Button(onClick = {
                 val activity = LocalContext as Activity
-                activity.finish()
+                activity.finishAffinity()
         },
             modifier = Modifier.fillMaxWidth()
 
