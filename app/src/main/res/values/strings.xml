@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">ScanQr</string>
+
+    //First Screen
+    <string name="fs_title">TUN frba</string>
+    <string name="fs_sub_title">Desarrollo de APPs para dispositivos móviles</string>
+    <string name="fs_sub_title2">Scanea tu Código QR</string>
+    <string name="fs_sub_title3">Genera tu Código QR</string>
+    <string name="fs_button_scan">Scanear</string>
+    <string name="fs_button_generate">Generar</string>
+    <string name="fs_button_exit">Salir</string>
+
+    //QrScannerScreen
+    <string name="ss_back_text">Volver atrás</string>
+
+
+    //QrGeneratorScreen
+    <string name="gs_title_qr_generate">Generar Código QR</string>
+    <string name="gs_enter_text">Ingresa el texto</string>
+    <string name="gs_qr_generate">Generar QR</string>
+    <string name="gs_qr_code_image">Imagen de Código QR</string>
+    <string name="gs_save">Guardar QR</string>
+    <string name="gs_back">Volver atrás</string>
+
+    <string name="gs_save_file_ok">Se guardó el código QR</string>
+    <string name="gs_save_file_no_ok">No se guardó el código QR</string>
+    <string name="gs_save_file_is_null">el archivo es nulo</string>
+    <string name="gs_save_file_failed">Error al guardar el archivo</string>
+    <string name="gs_qr_code_no_ok">No se generó el QR</string>
+
 </resources>

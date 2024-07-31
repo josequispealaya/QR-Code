@@ -2,12 +2,11 @@ package com.example.scanqr.screens
 
 import android.Manifest
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,10 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import com.example.scanqr.R
 import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 
@@ -38,6 +43,9 @@ fun QrScannerScreen(navController: NavController) {
     var stringFromQrCode by remember { mutableStateOf("") }
     var isPopupVisible by remember { mutableStateOf(false) }
     var isScanningEnabled by remember { mutableStateOf(true) }
+
+    val buttonTextColor = colorResource(id = R.color.button_text_color)
+    val buttonColor = colorResource(id = R.color.button_color)
 
     val context = LocalContext.current
 
@@ -54,10 +62,9 @@ fun QrScannerScreen(navController: NavController) {
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { granted ->
             hasCamPermission = granted
-            if (!granted)
-                run {
-                    navController.popBackStack()
-                }
+            if (!granted) {
+                navController.popBackStack()
+            }
         }
     )
 
@@ -80,7 +87,6 @@ fun QrScannerScreen(navController: NavController) {
                             if (isScanningEnabled) {
                                 result.text?.let { barCodeOrQr ->
                                     stringFromQrCode = barCodeOrQr
-                                    Log.d("QrScanner", stringFromQrCode)
                                     isPopupVisible = true
                                     isScanningEnabled = false
                                 }
@@ -94,57 +100,90 @@ fun QrScannerScreen(navController: NavController) {
         }
 
         if (isPopupVisible) {
-            AlertDialog(
-                onDismissRequest = { isPopupVisible = false },
-                title = { Text(text = "Código Escaneado") },
-                text = { Text(text = stringFromQrCode) },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            //navController.navigate(Uri.parse(stringFromQrCode))
-                            //val webpage = Uri.parse(stringFromQrCode)
-                            //val context = LocalContext
-                            //val permissionState = rememberPermissionState(Manifest.permission.INTERNET)
-                            //val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()){isGranted ->
-                               // if (true) {
-                                  //  val intent = Intent(Intent.ACTION_VIEW, webpage)
-                                  //  context.startActivity(intent)
-                               // }
-
+            if (stringFromQrCode.startsWith("http://") || stringFromQrCode.startsWith("https://") || stringFromQrCode.startsWith("www.")) {
+                AlertDialog(
+                    onDismissRequest = {
+                        isPopupVisible = false
+                        isScanningEnabled = true
+                    },
+                    title = { Text(text = "Código QR escaneado") },
+                    text = { Text(text = "$stringFromQrCode\n ¿Deseas ir a la página web?") },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                try {
+                                    //agregamos el prefijo https:// si el link no lo trae
+                                    var formattedUrl = stringFromQrCode
+                                    if (formattedUrl.startsWith("www.")) {
+                                        formattedUrl = "https://$formattedUrl"
+                                    }
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(formattedUrl))
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                    context.startActivity(intent)
+                                } catch (e: ActivityNotFoundException) {
+                                    e.printStackTrace()
+                                }
+                                isPopupVisible = false
+                                isScanningEnabled = true
+                            }
+                        ) {
+                            Text(text = "Sí")
                         }
-                    ) {
-                        Text(text = "los permisos para ir a una página externa al hacer clik en el código no están funcionando")
-                    }
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                                  isPopupVisible = false
-                                  isScanningEnabled = true
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = {
+                                isPopupVisible = false
+                                isScanningEnabled = true
+                            }
+                        ) {
+                            Text(text = "No")
                         }
-                    ) {
-                        Text(text = "Close")
                     }
-                }
-
-            )
+                )
+            } else {
+                AlertDialog(
+                    onDismissRequest = {
+                        isPopupVisible = false
+                        isScanningEnabled = true
+                    },
+                    title = { Text(text = "Código Escaneado") },
+                    text = { Text(text = stringFromQrCode) },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                isPopupVisible = false
+                                isScanningEnabled = true
+                            }
+                        ) {
+                            Text(text = "OK")
+                        }
+                    }
+                )
+            }
         }
     }
 
-    //Spacer(modifier = Modifier.height(80.dp))
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        Text("Este es tu QR Escabeado")
-        Button(modifier = Modifier.padding(bottom = 20.dp),
+        Button(
             onClick = {
-            navController.popBackStack()
-        }) {
-            Text(text = "Volver atrás")
-
+                navController.popBackStack()
+            },
+            modifier = Modifier
+                .padding(bottom = 16.dp),
+            colors = ButtonDefaults.buttonColors(buttonColor)
+        ) {
+            Text(
+                text = stringResource(R.string.ss_back_text),
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontSize = 20.sp
+                ),
+                color = buttonTextColor
+            )
         }
     }
 }

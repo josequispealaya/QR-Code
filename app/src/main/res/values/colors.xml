@@ -7,4 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+
+    <!--BUTTONS-->
+    <color name="button_color">#FF6200EE</color>
+    <color name="button_text_color">#FFFFFFFF</color>
+
+<!--    FIRST SCREEN-->
+
+    <color name="fs_background_banner">#FF111328</color>
+    <color name="fs_background_first_screen">#F0F0F0</color>
+    <color name="fs_sub_title_text_color">#FF000000</color>
+
+
 </resources>
