@@ -1,2 +1,3 @@
 QR-Code
-Scaner y Generador de Códigos QR
+
+Generador y Scanner de Códigos QR
